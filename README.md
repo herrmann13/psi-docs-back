@@ -32,5 +32,3 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 - **[Node.js](https://nodejs.org/)** - Plataforma para execução do backend.  
 - **[Express](https://expressjs.com/)** - Framework minimalista para criação de APIs REST.  
 - **[SQLite](https://www.sqlite.org/)** - Banco de dados leve e fácil de configurar.  
-- **[Knex.js](https://knexjs.org/)** *(opcional)* - Query builder para facilitar operações no SQLite.  
-- **[JWT](https://jwt.io/)** *(opcional)* - Para autenticação de usuários.  
