@@ -40,6 +40,17 @@ PatientModel.init({
     phone: {
         type: DataTypes.STRING(20),
         allowNull: false
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'user_id',
+        references: {
+            model: 'users',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
     }
 }, {
     sequelize: require('../utils/db').default,
