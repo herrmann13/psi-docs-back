@@ -1,49 +1,48 @@
 import { DataTypes, Model } from "sequelize";
 
-export class PatientModel extends Model {
+export class EmergencyContactModel extends Model {
     declare id: number;
     declare createdAt: Date;
     declare updatedAt: Date;
-    declare isActive: boolean;
-    declare fullName: string;
-    declare cpf: string;
-    declare birthDate: Date;
+    declare name: string;
     declare phone: string;
+    declare patientId: number;
 }
 
-PatientModel.init({
+EmergencyContactModel.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    isActive: {
+    is_active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
         field: 'is_active'
     },
-    fullName: {
+    name: {
         type: DataTypes.STRING(255),
         allowNull: false
-    },
-    cpf: {
-        type: DataTypes.STRING(14),
-        allowNull: false,
-        unique: true
-    },
-    birthDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        field: 'birth_date'
     },
     phone: {
         type: DataTypes.STRING(20),
         allowNull: false
+    },
+    patientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'patient_id',
+        references: {
+            model: 'patients',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
     }
 }, {
     sequelize: require('../utils/db').default,
-    tableName: 'patients',
+    tableName: 'emergency_contacts',
     timestamps: true,
     underscored: true
-}); 
+});
