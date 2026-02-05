@@ -4,7 +4,8 @@ export class UserModel extends Model {
     declare id: number;
     declare name: string;
     declare email: string;
-    declare password: string;
+    declare password: string | null;
+    declare googleId: string | null;
 }
 
 UserModel.init({
@@ -24,7 +25,13 @@ UserModel.init({
     },
     password: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
+    },
+    googleId: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        unique: true,
+        field: 'google_id'
     }
 }, {
     sequelize: require('../utils/db').default,
