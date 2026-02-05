@@ -1,10 +1,13 @@
-import mysql from 'mysql2/promise';
+import { dbConfig } from '../config/db.config';
+import { Sequelize } from 'sequelize';
 
-const pool = mysql.createPool({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: 'db',
-    waitForConnections: true,
-    connectionLimit: 10
+const database = process.env.DB_NAME as string
+
+const sequelize = new Sequelize(database ?? '',dbConfig.user, dbConfig.password, {
+    host: dbConfig.host,
+    port: dbConfig.port ? Number(dbConfig.port) : undefined,
+    dialect: 'postgres',
+    logging: false
 })
+
+export default sequelize;
