@@ -1,12 +1,17 @@
 import express, { Request, Response } from "express";
 import patientRoutes from "./routes/patient.route";
-import { authMiddleware } from "./middleware/auth.middleware";
+import userRoutes from "./routes/user.route";
+import addressRoutes from "./routes/address.route";
+import emergencyContactRoutes from "./routes/emergencyContact.route";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
-app.use(patientRoutes);
+app.use("/patients", patientRoutes);
+app.use("/users", userRoutes);
+app.use("/addresses", addressRoutes);
+app.use("/emergency-contacts", emergencyContactRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({ message: "API Psi-Docs online"});

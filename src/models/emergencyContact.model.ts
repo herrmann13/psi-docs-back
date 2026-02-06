@@ -4,6 +4,7 @@ export class EmergencyContactModel extends Model {
     declare id: number;
     declare createdAt: Date;
     declare updatedAt: Date;
+    declare isActive: boolean;
     declare name: string;
     declare phone: string;
     declare patientId: number;
@@ -15,7 +16,7 @@ EmergencyContactModel.init({
         primaryKey: true,
         autoIncrement: true
     },
-    is_active: {
+    isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,

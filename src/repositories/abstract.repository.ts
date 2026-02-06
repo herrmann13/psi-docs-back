@@ -1,3 +1,5 @@
+import type { Transaction } from "sequelize";
+
 class AbstractRepository<T> {
     private model: any;
 
@@ -5,28 +7,31 @@ class AbstractRepository<T> {
         this.model = model;
     }
 
-    async create(data: Partial<T>): Promise<T> {
-        const instance = await this.model.create(data);
+    async create(data: Partial<T>, transaction?: Transaction): Promise<T> {
+        const instance = await this.model.create(data, { transaction });
         return instance.toJSON() as T;
     }
 
-    async findById(id: number): Promise<T | null> {
-        const instance = await this.model.findByPk(id);
+    async findById(id: number, transaction?: Transaction): Promise<T | null> {
+        const instance = await this.model.findByPk(id, { transaction });
         return instance ? (instance.toJSON() as T) : null;
     }
 
-    async findAll(): Promise<T[]> {
-        const instances = await this.model.findAll();
+    async findAll(transaction?: Transaction): Promise<T[]> {
+        const instances = await this.model.findAll({ transaction });
         return instances.map((instance: any) => instance.toJSON() as T);
     }
 
-    async update(id: number, data: Partial<T>): Promise<boolean> {
-        const [updatedRows] = await this.model.update(data, { where: { id } });
-        return updatedRows > 0;
+    async update(id: number, data: Partial<T>, transaction?: Transaction): Promise<T | null> {
+        const [updatedRows] = await this.model.update(data, { where: { id }, transaction });
+        if (updatedRows > 0) {
+            return this.findById(id, transaction);
+        }
+        return null;
     }
 
-    async delete(id: number): Promise<boolean> {
-        const deletedRows = await this.model.destroy({ where: { id } });
+    async delete(id: number, transaction?: Transaction): Promise<boolean> {
+        const deletedRows = await this.model.destroy({ where: { id }, transaction });
         return deletedRows > 0;
     }
 }

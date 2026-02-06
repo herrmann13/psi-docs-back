@@ -17,8 +17,9 @@
     "express": "^5.2.1",
     "google-auth-library": "^10.5.0",
     "node-postgres": "^0.6.2",
-    "pino": "^10.1.1",
-    "sequelize": "^6.37.7"
+    "pino": "^10.3.0",
+    "sequelize": "^6.37.7",
+    "zod": "^4.0.5"
   },
   "scripts": {
     "dev": "bun --watch src/server.ts"

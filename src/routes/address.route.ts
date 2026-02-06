@@ -1,9 +1,9 @@
 import { Router } from "express";
-import PatientController from "../controllers/patient.controller";
+import AddressController from "../controllers/address.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
-const controller = new PatientController();
+const controller = new AddressController();
 
 router.use(authMiddleware);
 

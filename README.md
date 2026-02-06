@@ -32,3 +32,38 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 - **[Node.js](https://nodejs.org/)** - Plataforma para execução do backend.  
 - **[Express](https://expressjs.com/)** - Framework minimalista para criação de APIs REST.  
 - **[SQLite](https://www.sqlite.org/)** - Banco de dados leve e fácil de configurar.  
+- **[Zod](https://zod.dev/)** - Validação de dados em runtime.  
+
+---
+
+## Endpoints
+
+Todos os endpoints exigem `Authorization: Bearer <token>`.
+
+### Padrão de leitura (GET)
+
+- `GET /patients` lista todos
+- `GET /patients?id=1` busca por id
+
+O mesmo padrão se aplica para:
+- `GET /users`
+- `GET /addresses`
+- `GET /emergency-contacts`
+
+### CRUD básico
+
+- `POST /patients`
+- `PUT /patients/:id`
+- `DELETE /patients/:id`
+
+- `POST /users`
+- `PUT /users/:id`
+- `DELETE /users/:id`
+
+- `POST /addresses`
+- `PUT /addresses/:id`
+- `DELETE /addresses/:id`
+
+- `POST /emergency-contacts`
+- `PUT /emergency-contacts/:id`
+- `DELETE /emergency-contacts/:id`

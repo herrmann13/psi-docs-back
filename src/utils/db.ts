@@ -1,4 +1,4 @@
-import { dbConfig } from '../config/db.config';
+import { dbConfig } from '../configs/db.config';
 import { Sequelize } from 'sequelize';
 
 const database = process.env.DB_NAME as string
