@@ -40,6 +40,10 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 
 Todos os endpoints exigem `Authorization: Bearer <token>`.
 
+## Documentacao
+
+Swagger disponivel em `GET /docs`.
+
 ### Padrão de leitura (GET)
 
 - `GET /patients` lista todos
