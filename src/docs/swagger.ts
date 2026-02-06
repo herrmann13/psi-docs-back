@@ -19,6 +19,31 @@ const options = {
         },
         security: [{ bearerAuth: [] }],
         paths: {
+            "/auth/google": {
+                post: {
+                    summary: "Login with Google",
+                    security: [],
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        idToken: { type: "string" }
+                                    },
+                                    required: ["idToken"]
+                                }
+                            }
+                        }
+                    },
+                    responses: {
+                        "200": { description: "Authenticated" },
+                        "400": { description: "Validation error" },
+                        "401": { description: "Invalid token" }
+                    }
+                }
+            },
             "/patients": {
                 get: {
                     summary: "List patients or get by id",

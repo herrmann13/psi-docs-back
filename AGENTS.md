@@ -36,3 +36,8 @@ This file defines the shared rules all agents must follow when implementing chan
 - Routes must be authenticated with `authMiddleware`.
 - GET routes must be a single `/` endpoint that uses query param `id` to decide `findById`; when absent, use `findAll`.
 - `src/server.ts` mounts routes with an entity-specific prefix.
+
+## Auth
+
+- Login is handled by `POST /auth/google` with `idToken` in the body.
+- `authMiddleware` validates the internal JWT and protects all routes.

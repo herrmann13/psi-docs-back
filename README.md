@@ -39,11 +39,19 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 ## Endpoints
 
 Todos os endpoints exigem `Authorization: Bearer <token>`.
-Usuarios sao autenticados apenas via Google; o campo `password` nao e usado no momento.
+Usuarios sao autenticados via Google e recebem um JWT interno no login; o campo `password` nao e usado no momento.
 
 ## Documentacao
 
 Swagger disponivel em `GET /docs`.
+
+## Autenticacao
+
+Login via Google:
+- `POST /auth/google` com `{ "idToken": "..." }`
+- Resposta: `{ token, user }`
+
+Use o `token` retornado em `Authorization: Bearer <token>`.
 
 ### Padrão de leitura (GET)
 
