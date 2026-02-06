@@ -6,7 +6,7 @@ export const AddressCreateSchema = z.object({
     neighborhood: z.string().min(1),
     city: z.string().min(1),
     state: z.string().min(1),
-    complement: z.string().min(1),
+    complement: z.string().min(1).optional(),
     patientId: z.number().int()
 });
 

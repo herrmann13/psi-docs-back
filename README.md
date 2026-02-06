@@ -39,6 +39,7 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 ## Endpoints
 
 Todos os endpoints exigem `Authorization: Bearer <token>`.
+Usuarios sao autenticados apenas via Google; o campo `password` nao e usado no momento.
 
 ## Documentacao
 

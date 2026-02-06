@@ -9,7 +9,6 @@ export const PatientCreateSchema = z.object({
 });
 
 export const PatientUpdateSchema = z.object({
-    isActive: z.boolean().optional(),
     fullName: z.string().min(1).optional(),
     cpf: z.string().min(1).optional(),
     birthDate: z.coerce.date().optional(),
