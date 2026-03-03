@@ -20,9 +20,9 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 ### Funcionalidades Principais
 
 - [ ] **CRUD de Pacientes:** Criação, leitura, atualização e exclusão de registros de pacientes.  
-- [ ] **Registro de Sessões:** Armazenamento de anotações de evolução clínica (diário terapêutico e anamnese).  
+- [ ] **Agenda de Sessões:** CRUD de atendimentos com status e valores.  
+- [ ] **Cobranças e Pagamentos:** Registro de cobranças, pagamentos e anexos de comprovantes.  
 - [ ] **Autenticação e Autorização:** Controle de acesso para psicólogos e administradores.  
-- [ ] **Histórico de Sessões:** Consulta de sessões anteriores com filtragem por paciente.  
 - [ ] **Integração com Front-end:** Endpoints REST prontos para consumo pela aplicação web.
 
 ---
@@ -38,8 +38,9 @@ O backend é desenvolvido com **Node.js**, **Express** e **SQLite**, priorizando
 
 ## Endpoints
 
-Todos os endpoints exigem `Authorization: Bearer <token>`.
+Rotas de pacientes, usuarios, enderecos e contatos de emergencia exigem `Authorization: Bearer <token>`.
 Usuarios sao autenticados via Google e recebem um JWT interno no login; o campo `password` nao e usado no momento.
+As rotas novas de agenda e financeiro estao sem autenticacao por enquanto.
 
 ## Documentacao
 
@@ -62,6 +63,11 @@ O mesmo padrão se aplica para:
 - `GET /users`
 - `GET /addresses`
 - `GET /emergency-contacts`
+- `GET /appointments`
+- `GET /charges`
+- `GET /payments`
+- `GET /payment-charges`
+- `GET /payment-attachments`
 
 ### CRUD básico
 
@@ -80,3 +86,23 @@ O mesmo padrão se aplica para:
 - `POST /emergency-contacts`
 - `PUT /emergency-contacts/:id`
 - `DELETE /emergency-contacts/:id`
+
+- `POST /appointments`
+- `PUT /appointments/:id`
+- `DELETE /appointments/:id`
+
+- `POST /charges`
+- `PUT /charges/:id`
+- `DELETE /charges/:id`
+
+- `POST /payments`
+- `PUT /payments/:id`
+- `DELETE /payments/:id`
+
+- `POST /payment-charges`
+- `PUT /payment-charges/:id`
+- `DELETE /payment-charges/:id`
+
+- `POST /payment-attachments`
+- `PUT /payment-attachments/:id`
+- `DELETE /payment-attachments/:id`
