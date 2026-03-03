@@ -11,9 +11,12 @@ import paymentChargeRoutes from "./routes/paymentCharge.route";
 import paymentAttachmentRoutes from "./routes/paymentAttachment.route";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
+import sequelize from "./utils/db";
+import { logger } from "./utils/logger";
 
 const app = express();
-const port = 3000;
+const port = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || "0.0.0.0";
 
 app.use(express.json());
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -33,11 +36,43 @@ app.get("/", (req: Request, res: Response) => {
 })
 
 app.get("/health", (req:Request, res: Response) => {
-    res.json({
-        api:"online",
-        db:{
-            status:"not-implemented",
-            responseTime:"not-implemented"
+    const startedAt = Date.now();
+    const databaseUrl = process.env.DATABASE_URL;
+    let dbHost: string | undefined;
+    if (databaseUrl) {
+        try {
+            dbHost = new URL(databaseUrl).host;
+        } catch {
+            dbHost = undefined;
         }
-    });
+    }
+    logger.info({ dbHost, hasDatabaseUrl: Boolean(databaseUrl) }, "Health check started");
+    sequelize.authenticate()
+        .then(() => {
+            const responseTime = Date.now() - startedAt;
+            logger.info({ dbHost, responseTime }, "Health check database online");
+            res.json({
+                api: "online",
+                db: {
+                    status: "online",
+                    responseTime
+                }
+            });
+        })
+        .catch((error) => {
+            const responseTime = Date.now() - startedAt;
+            logger.error({ dbHost, responseTime, error }, "Health check database offline");
+            res.status(503).json({
+                api: "online",
+                db: {
+                    status: "offline",
+                    responseTime,
+                    error: error instanceof Error ? error.message : "Database connection failed"
+                }
+            });
+        });
 })
+
+app.listen(port, host, () => {
+    console.log(`API Psi-Docs rodando em http://${host}:${port}`);
+});
