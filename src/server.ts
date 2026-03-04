@@ -13,12 +13,17 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
 import sequelize from "./utils/db";
 import { logger } from "./utils/logger";
+import cors from "cors";
+import { initAssociations } from "./models/associations";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || "0.0.0.0";
 
 app.use(express.json());
+if (process.env.NODE_ENV !== "production") {
+    app.use(cors());
+}
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/auth", authRoutes);
 app.use("/patients", patientRoutes);
@@ -74,5 +79,12 @@ app.get("/health", (req:Request, res: Response) => {
 })
 
 app.listen(port, host, () => {
+    //sequelize.sync()
+     //   .then(() => {
+      //      logger.info("Database synchronized successfully");
+      //  }).catch((error) => {
+       //     logger.error({ error }, "Database synchronization failed");
+       // });
+    initAssociations()
     console.log(`API Psi-Docs rodando em http://${host}:${port}`);
 });

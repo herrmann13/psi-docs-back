@@ -5,7 +5,7 @@ import { authMiddleware } from "../middleware/auth.middleware";
 const router = Router();
 const controller = new PatientController();
 
-router.use(authMiddleware);
+//router.use(authMiddleware);
 
 router.post("/", (req, res) => controller.create(req, res));
 router.get("/", (req, res) => controller.findAllOrById(req, res));
