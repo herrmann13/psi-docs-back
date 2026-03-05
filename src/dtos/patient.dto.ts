@@ -1,10 +1,27 @@
 import { z } from "zod";
 
+const PatientUserSchema = z.object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    googleId: z.string().min(1).optional().nullable(),
+    licenseNumber: z.string().min(1).optional(),
+    defaultSessionValue: z.number().optional(),
+    isActive: z.boolean().optional()
+});
+
+const PatientEmergencyContactSchema = z.object({
+    name: z.string().min(1),
+    phone: z.string().min(1),
+    isActive: z.boolean().optional()
+});
+
 export const PatientCreateSchema = z.object({
     fullName: z.string().min(1),
     cpf: z.string().min(1),
     birthDate: z.coerce.date(),
-    phone: z.string().min(1)
+    phone: z.string().min(1),
+    user: PatientUserSchema,
+    emergencyContacts: z.array(PatientEmergencyContactSchema).optional()
 });
 
 export const PatientUpdateSchema = z.object({
