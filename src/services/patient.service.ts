@@ -3,38 +3,39 @@ import AbstractService from "./abstract.service";
 import { withTransaction } from "../utils/conditionalTransaction";
 import { logger } from "../utils/logger";
 import type { PatientCreate } from "../dtos/patient.dto";
-import UserRepository from "../repositories/user.repository";
 import EmergencyContactRepository from "../repositories/emergencyContact.repository";
+import AddressRepository from "../repositories/address.repository";
 
 class PatientService extends AbstractService<any>   {
-    private userRepository: UserRepository;
     private emergencyContactRepository: EmergencyContactRepository;
+    private addressRepository: AddressRepository;
 
     constructor() {
         const PatientRepository = require("../repositories/patient.repository").default;
         super(new PatientRepository(), "Patient");
-        this.userRepository = new UserRepository();
         this.emergencyContactRepository = new EmergencyContactRepository();
+        this.addressRepository = new AddressRepository();
     }
 
     async create(data: PatientCreate, transaction?: Transaction, actorUserId?: number): Promise<any> {
-        const { user, emergencyContacts, ...patientData } = data;
+        const { emergencyContacts, address, ...patientData } = data;
+
+        if (!actorUserId) {
+            throw new Error("Authenticated user required to create patient");
+        }
 
         const created = await withTransaction(async (tx) => {
-            const createdUser = await this.userRepository.create({
-                name: user.name,
-                email: user.email,
-                googleId: user.googleId ?? null,
-                licenseNumber: user.licenseNumber ?? null,
-                defaultSessionValue: user.defaultSessionValue ?? null,
-                isActive: user.isActive ?? true,
-                password: null
-            }, tx);
-
             const createdPatient = await this.repository.create({
                 ...patientData,
-                userId: createdUser.id
+                userId: actorUserId
             }, tx);
+
+            if (address) {
+                await this.addressRepository.create({
+                    ...address,
+                    patientId: createdPatient.id
+                }, tx);
+            }
 
             if (emergencyContacts && emergencyContacts.length > 0) {
                 await Promise.all(

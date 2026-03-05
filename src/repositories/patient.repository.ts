@@ -9,12 +9,17 @@ class PatientRepository extends AbstractRepository<any> {
     async findById(id: number, transaction?: import("sequelize").Transaction): Promise<any | null> {
         const { PatientModel } = require("../models/patient.model");
         const { EmergencyContactModel } = require("../models/emergencyContact.model");
+        const { AddressModel } = require("../models/address.model");
         const instance = await PatientModel.findByPk(id, {
             transaction,
             include: [
                 {
                     model: EmergencyContactModel,
                     as: "emergencyContacts"
+                },
+                {
+                    model: AddressModel,
+                    as: "address"
                 }
             ]
         });
@@ -24,12 +29,17 @@ class PatientRepository extends AbstractRepository<any> {
     async findAll(transaction?: import("sequelize").Transaction): Promise<any[]> {
         const { PatientModel } = require("../models/patient.model");
         const { EmergencyContactModel } = require("../models/emergencyContact.model");
+        const { AddressModel } = require("../models/address.model");
         const instances = await PatientModel.findAll({
             transaction,
             include: [
                 {
                     model: EmergencyContactModel,
                     as: "emergencyContacts"
+                },
+                {
+                    model: AddressModel,
+                    as: "address"
                 }
             ]
         });

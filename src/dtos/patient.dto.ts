@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-const PatientUserSchema = z.object({
-    name: z.string().min(1),
-    email: z.string().email(),
-    googleId: z.string().min(1).optional().nullable(),
-    licenseNumber: z.string().min(1).optional(),
-    defaultSessionValue: z.number().optional(),
-    isActive: z.boolean().optional()
-});
-
 const PatientEmergencyContactSchema = z.object({
     name: z.string().min(1),
     phone: z.string().min(1),
     isActive: z.boolean().optional()
+});
+
+const PatientAddressSchema = z.object({
+    street: z.string().min(1),
+    number: z.string().min(1),
+    complement: z.string().min(1).optional().nullable(),
+    neighborhood: z.string().min(1),
+    city: z.string().min(1),
+    state: z.string().min(1)
 });
 
 export const PatientCreateSchema = z.object({
@@ -20,7 +20,7 @@ export const PatientCreateSchema = z.object({
     cpf: z.string().min(1),
     birthDate: z.coerce.date(),
     phone: z.string().min(1),
-    user: PatientUserSchema,
+    address: PatientAddressSchema.optional(),
     emergencyContacts: z.array(PatientEmergencyContactSchema).optional()
 });
 
