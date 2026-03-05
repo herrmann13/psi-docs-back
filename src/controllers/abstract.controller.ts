@@ -21,7 +21,7 @@ class AbstractController<TCreate, TUpdate> {
             });
         }
 
-        const created = await this.service.create(payload.data);
+        const created = await this.service.create(payload.data, undefined, req.user?.id);
         return res.status(201).json(created);
     }
 
@@ -64,7 +64,7 @@ class AbstractController<TCreate, TUpdate> {
             });
         }
 
-        const updated = await this.service.update(id, payload.data);
+        const updated = await this.service.update(id, payload.data, undefined, req.user?.id);
         if (!updated) {
             return res.status(404).json({ message: "Not found" });
         }
@@ -78,7 +78,7 @@ class AbstractController<TCreate, TUpdate> {
             return res.status(400).json({ message: "Invalid id" });
         }
 
-        const deleted = await this.service.delete(id);
+        const deleted = await this.service.delete(id, undefined, req.user?.id);
         if (!deleted) {
             return res.status(404).json({ message: "Not found" });
         }

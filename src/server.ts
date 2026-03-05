@@ -14,6 +14,8 @@ import { swaggerSpec } from "./docs/swagger";
 import sequelize from "./utils/db";
 import { logger } from "./utils/logger";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+import { runWithRequestContext } from "./utils/requestContext";
 import { initAssociations } from "./models/associations";
 
 const app = express();
@@ -24,6 +26,28 @@ app.use(express.json());
 if (process.env.NODE_ENV !== "production") {
     app.use(cors());
 }
+app.use((req, _res, next) => {
+    const header = req.headers.authorization;
+    const jwtSecret = process.env.JWT_SECRET;
+    let actorUserId: number | null = null;
+
+    if (jwtSecret && header && header.startsWith("Bearer ")) {
+        const token = header.slice("Bearer ".length).trim();
+        if (token) {
+            try {
+                const payload = jwt.verify(token, jwtSecret) as { id?: number };
+                if (typeof payload.id === "number") {
+                    actorUserId = payload.id;
+                    req.user = payload as any;
+                }
+            } catch {
+                actorUserId = null;
+            }
+        }
+    }
+
+    runWithRequestContext({ actorUserId }, () => next());
+});
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/auth", authRoutes);
 app.use("/patients", patientRoutes);

@@ -11,47 +11,47 @@ class AbstractService<T> {
         this.entityName = entityName;
     }
 
-    async create(data: T, transaction?: Transaction): Promise<T> {
+    async create(data: T, transaction?: Transaction, actorUserId?: number): Promise<T> {
         const created = await withTransaction<T>((tx) => this.repository.create(data, tx), transaction);
         const createdId = (created as { id?: number }).id;
         if (createdId !== undefined) {
-            logger.info({ id: createdId }, `${this.entityName} created`);
+            logger.info({ entity: this.entityName, id: createdId, actorUserId }, `${this.entityName} created`);
         }
         return created;
     }
 
     async findAll(transaction?: Transaction): Promise<T[]> {
         const items = await this.repository.findAll(transaction);
-        logger.info({ count: items.length }, `${this.entityName} list`);
+        logger.info({ entity: this.entityName, count: items.length }, `${this.entityName} list`);
         return items;
     }
 
     async findById(id: number, transaction?: Transaction): Promise<T | null> {
         const item = await this.repository.findById(id, transaction);
         if (item) {
-            logger.info({ id }, `${this.entityName} found`);
+            logger.info({ entity: this.entityName, id }, `${this.entityName} found`);
         } else {
-            logger.info({ id }, `${this.entityName} not found`);
+            logger.info({ entity: this.entityName, id }, `${this.entityName} not found`);
         }
         return item;
     }
 
-    async update(id: number, data: Partial<T>, transaction?: Transaction): Promise<T | null> {
+    async update(id: number, data: Partial<T>, transaction?: Transaction, actorUserId?: number): Promise<T | null> {
         const updated = await withTransaction<T | null>((tx) => this.repository.update(id, data, tx), transaction);
         if (updated) {
-            logger.info({ id }, `${this.entityName} updated`);
+            logger.info({ entity: this.entityName, id, actorUserId }, `${this.entityName} updated`);
         } else {
-            logger.info({ id }, `${this.entityName} not found`);
+            logger.info({ entity: this.entityName, id, actorUserId }, `${this.entityName} not found`);
         }
         return updated;
     }
 
-    async delete(id: number, transaction?: Transaction): Promise<boolean> {
+    async delete(id: number, transaction?: Transaction, actorUserId?: number): Promise<boolean> {
         const deleted = await withTransaction<boolean>((tx) => this.repository.delete(id, tx), transaction);
         if (deleted) {
-            logger.info({ id }, `${this.entityName} deleted`);
+            logger.info({ entity: this.entityName, id, actorUserId }, `${this.entityName} deleted`);
         } else {
-            logger.info({ id }, `${this.entityName} not found`);
+            logger.info({ entity: this.entityName, id, actorUserId }, `${this.entityName} not found`);
         }
         return deleted;
     }
